@@ -5,45 +5,6 @@ import (
 	"time"
 )
 
-type scare struct {
-	start, end float64
-	face       int
-}
-
-var scares = []scare{{39.2, 40.15, 0}, {40.85, 41.25, 3}, {42.05, 43.3, 5}, {43.85, 44.2, 1}, {62.4, 63.05, 2}, {64.15, 65.3, 4}, {67.05, 67.38, 0}, {69.1, 70.55, 5}, {84.1, 84.45, 1}, {85, 85.9, 3}, {87.3, 87.62, 4}, {89, 90.35, 2}, {91.15, 91.78, 5}, {105.4, 105.7, 0}, {106.2, 107, 4}, {108, 108.35, 1}, {109.2, 110.35, 5}, {111.5, 112, 2}, {113, 114.35, 3}}
-
-func scareAt(t float64) (scare, bool) {
-	for _, s := range scares {
-		if t >= s.start && t < s.end {
-			return s, true
-		}
-	}
-	return scare{}, false
-}
-
-func storyText(t float64) (string, string) {
-	switch {
-	case t < 2.6:
-		return "", ""
-	case t < 5.6:
-		return "АРХИВ КАМЕР ВОССТАНОВЛЕН", "Блок наблюдения // сектор 09"
-	case t < 9:
-		return "Запись оборвалась в 03:17.", "Причина остановки неизвестна."
-	case t < 12.5:
-		return "Камеры не записывают звук.", "Но в журнале оператора есть одна строка."
-	case t < 17.4:
-		return "«кто-то стучит по объективу изнутри»", "03:16:42"
-	case t < 21.2:
-		return "На первой камере коридор пуст.", "На второй — тоже."
-	case t < 25.2:
-		return "На третьей появляется человек.", "Он стоит слишком далеко, чтобы рассмотреть лицо."
-	case t < 29:
-		return "Следующий кадр пропущен.", "Когда изображение возвращается — он ближе."
-	case t < 32.3:
-		return "Ещё ближе.", "И теперь смотрит прямо в объектив."
-	}
-	return "", ""
-}
 func drawVignette(hdc uintptr, w, h int32) {
 	fill(hdc, RECT{0, 0, w, h}, rgb(3, 3, 4))
 	for i := 0; i < 6; i++ {
@@ -119,7 +80,7 @@ func drawMonitorGrid(hdc uintptr, w, h int32, t float64) {
 }
 func drawRecoveredFrame(hdc uintptr, w, h int32, t float64) {
 	fill(hdc, RECT{0, 0, w, h}, rgb(1, 1, 1))
-	drawBMP(hdc, corridorFigure, 0, 0, w, h)
+	drawCorridorImage(hdc, 0, 0, w, h)
 	drawText(hdc, "RECOVERED FRAME // 03:17:11.042", RECT{28, 20, w - 28, 55}, 12, rgb(190, 190, 192), 600, "Consolas", DT_LEFT|DT_VCENTER|DT_SINGLELINE)
 	if t > 77 {
 		drawText(hdc, "FACE MATCH: VIEWER", RECT{0, int32(float64(h) * .79), w, int32(float64(h) * .87)}, 24, rgb(180, 12, 18), 800, "Consolas", DT_CENTER|DT_VCENTER|DT_SINGLELINE)
