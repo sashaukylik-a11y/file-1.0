@@ -52,6 +52,7 @@ const (
 	WM_DESTROY     = 0x0002
 	WM_CLOSE       = 0x0010
 	WM_PAINT       = 0x000F
+	WM_ERASEBKGND  = 0x0014
 	WM_TIMER       = 0x0113
 	WM_CHAR        = 0x0102
 	WM_SETCURSOR   = 0x0020
