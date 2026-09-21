@@ -1,0 +1,5 @@
+// V9 LITE/STABLE source is provided in the downloadable source ZIP from the ChatGPT build.
+// This branch intentionally returns to the lightweight V4-V7 architecture:
+// no embedded images, no long soundtrack, no DIBSection pipeline, 10 Hz event timer.
+//
+// Full build artifact/source package: SNAPWAVE_HORROR_V9_LITE_STABLE_SOURCE.zip
