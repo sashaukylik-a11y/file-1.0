@@ -135,9 +135,14 @@ func wndProc(h uintptr, msg uint32, wp, lp uintptr) uintptr {
 		dc, _, _ := pBeginPaint.Call(h, uintptr(unsafe.Pointer(&ps)))
 		var rc RECT
 		pGetClientRect.Call(h, uintptr(unsafe.Pointer(&rc)))
-		paint(dc, rc)
+		w, hh := rc.Right-rc.Left, rc.Bottom-rc.Top
+		buf := ensureBackBuffer(dc, w, hh)
+		paint(buf, RECT{0, 0, w, hh})
+		presentBackBuffer(dc, w, hh)
 		pEndPaint.Call(h, uintptr(unsafe.Pointer(&ps)))
 		return 0
+	case WM_ERASEBKGND:
+		return 1
 	case WM_TIMER:
 		if mode == 3 && time.Since(successSince) > 2200*time.Millisecond {
 			pPostQuitMessage.Call(0)
@@ -185,7 +190,11 @@ func wndProc(h uintptr, msg uint32, wp, lp uintptr) uintptr {
 			}
 		}
 		return 0
-	case WM_CLOSE, WM_DESTROY:
+	case WM_CLOSE:
+		pPostQuitMessage.Call(0)
+		return 0
+	case WM_DESTROY:
+		cleanupBackBuffer()
 		pPostQuitMessage.Call(0)
 		return 0
 	}
@@ -206,7 +215,7 @@ func main() {
 	pShowWindow.Call(hwnd, SW_SHOW)
 	pUpdateWindow.Call(hwnd)
 	playSoundtrack()
-	pSetTimer.Call(hwnd, 1, 33, 0)
+	pSetTimer.Call(hwnd, 1, 50, 0)
 	var m MSG
 	for {
 		r, _, _ := pGetMessageW.Call(uintptr(unsafe.Pointer(&m)), 0, 0, 0)
