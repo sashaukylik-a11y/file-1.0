@@ -1,9 +1,11 @@
-# SNAPWAVE HORROR V8
+# SNAPWAVE HORROR V8.2 AUDITED
 
 Native Windows x64 horror-prank / visual locker simulation written in Go + Win32/GDI.
 
-## V8 story
-V8 is a complete story rewrite. There is no swing scene. The horror is built around a recovered CCTV archive from Sector 09: empty corridors, a distant figure that moves closer between missing frames, a fake recording end, a four-camera monitor wall, a recovered frame marked `FACE MATCH: VIEWER`, multiple false endings, then the final SNAPWAVE lock screen.
+V8.2 is the stability rebuild of the CCTV story. The previous hitch around `Следующий кадр пропущен` was addressed by removing lazy BMP rendering, reducing redundant paints, adding robust back-buffer fallback, and fixing the Win32 cleanup/paint lifecycle.
+
+## Story
+Recovered CCTV archive from Sector 09: empty corridors, a distant figure moving closer between missing frames, false recording endings, a four-camera wall, a recovered frame marked `FACE MATCH: VIEWER`, multiple scare waves, then the final SNAPWAVE lock screen.
 
 ## Build
 Requirements:
@@ -21,21 +23,18 @@ Linux/macOS cross-build:
 ./build.sh
 ```
 
-`tools/generate_assets.py` deterministically generates the 2D horror BMP frames and a synchronized ~121 second stereo soundtrack. These generated assets are intentionally gitignored, so all editable source stays small while the final executable contains the real audiovisual resources and is larger than 10 MB.
+Both scripts regenerate the real BMP/WAV resources and run the audit before producing `SNAPWAVE_HORROR_V8_2_AUDITED.exe`.
 
 ## Password
 `snapwave`
 
-## Safety / behavior
+## Behavior
+- fullscreen/topmost prank UI
 - no autostart
 - no registry changes
-- no file deletion/encryption
+- no deletion/encryption of files
 - no network access
 - no global keyboard hooks
 - `Alt+F4` remains available
 
-The application is a fullscreen/topmost visual prank only.
-
-
-## V8.1 performance fix
-V8.1 uses a persistent GDI back buffer, suppresses redundant background erases, and renders on a 50 ms timer. This fixes the stall some systems experienced around the transition from `Следующий кадр пропущен` into the CCTV corridor scene.
+See `AUDIT.md` for the 10-pass audit.
