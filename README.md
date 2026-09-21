@@ -35,3 +35,7 @@ Linux/macOS cross-build:
 - `Alt+F4` remains available
 
 The application is a fullscreen/topmost visual prank only.
+
+
+## V8.1 performance fix
+V8.1 uses a persistent GDI back buffer, suppresses redundant background erases, and renders on a 50 ms timer. This fixes the stall some systems experienced around the transition from `Следующий кадр пропущен` into the CCTV corridor scene.
